@@ -18,11 +18,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type spaHandler struct {
-	staticPath string
-	indexPath  string
-}
-
 var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
 
 func main() {
