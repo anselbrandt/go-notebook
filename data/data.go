@@ -27,7 +27,7 @@ func (store NoteStore) Init() error {
 	return nil
 }
 
-func (store NoteStore) AllNotes() ([]Note, error) {
+func (store NoteStore) GetAll() ([]Note, error) {
 	rows, err := store.DB.Query("SELECT * FROM notes")
 	if err != nil {
 		return nil, err
@@ -51,4 +51,39 @@ func (store NoteStore) AllNotes() ([]Note, error) {
 	}
 
 	return nts, nil
+}
+
+func (store NoteStore) Get(rowid int64) (Note, error) {
+	note := Note{}
+	var id int
+	var contents string
+	err := store.DB.QueryRow(`
+	SELECT * FROM notes
+	WHERE id=?`, rowid).Scan(&id, &contents)
+	if err != nil {
+		return note, err
+	}
+	note = Note{
+		ID:       id,
+		Contents: contents,
+	}
+	return note, nil
+}
+
+func (store NoteStore) Add(note Note) (int64, error) {
+	stmt, err := store.DB.Prepare(`
+	INSERT INTO notes (contents) values (?)
+	`)
+	if err != nil {
+		return 0, err
+	}
+	result, err := stmt.Exec(note.Contents)
+	if err != nil {
+		return 0, err
+	}
+	rowid, err := result.LastInsertId()
+	if err != nil {
+		return rowid, err
+	}
+	return rowid, nil
 }

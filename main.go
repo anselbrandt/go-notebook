@@ -31,8 +31,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	store := data.NoteStore{DB: db}
+
+	store.Init()
+
 	// Create an instance of Notes containing the connection pool.
-	notes := &handlers.Notebook{Notes: data.NoteStore{DB: db}}
+	notes := &handlers.Notebook{Notes: store}
 
 	// Create new serve mux
 	m := mux.NewRouter()
@@ -42,7 +46,7 @@ func main() {
 	get.HandleFunc("/notes", notes.GetAll)
 
 	post := m.Methods(http.MethodPost).Subrouter()
-	post.HandleFunc("/notes", handlers.HealthCheck)
+	post.HandleFunc("/notes", notes.Add)
 
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
