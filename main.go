@@ -30,15 +30,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Create an instance of Env containing the connection pool.
-	env := &handlers.Env{DB: db}
+	// Create an instance of Notes containing the connection pool.
+	notes := &handlers.Notebook{DB: db}
 
 	// Create new serve mux
 	m := mux.NewRouter()
 
 	get := m.Methods(http.MethodGet).Subrouter()
 
-	get.HandleFunc("/notes", env.GetAll)
+	get.HandleFunc("/notes", notes.GetAll)
 
 	// create a new server
 	s := http.Server{
