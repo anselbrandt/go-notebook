@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"encoding/json"
 	"go-notes/data"
 	"log"
@@ -9,13 +8,13 @@ import (
 )
 
 type Notebook struct {
-	DB *sql.DB
+	Notes data.NoteStore
 }
 
 // Define GetAll as a method on Notebook.
 func (notebook *Notebook) GetAll(w http.ResponseWriter, r *http.Request) {
 	// We can now access the connection pool directly in our handlers.
-	notes, err := data.AllNotes(notebook.DB)
+	notes, err := notebook.Notes.AllNotes()
 	if err != nil {
 		log.Println(err)
 		http.Error(w, http.StatusText(500), 500)

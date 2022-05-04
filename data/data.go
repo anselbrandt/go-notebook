@@ -9,8 +9,12 @@ type Note struct {
 	Contents string
 }
 
-func Init(db *sql.DB) error {
-	stmt, err := db.Prepare(`
+type NoteStore struct {
+	DB *sql.DB
+}
+
+func (store NoteStore) Init() error {
+	stmt, err := store.DB.Prepare(`
 	CREATE TABLE IF NOT EXISTS "notes" (
 		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"contents" TEXT
@@ -23,8 +27,8 @@ func Init(db *sql.DB) error {
 	return nil
 }
 
-func AllNotes(db *sql.DB) ([]Note, error) {
-	rows, err := db.Query("SELECT * FROM notes")
+func (store NoteStore) AllNotes() ([]Note, error) {
+	rows, err := store.DB.Query("SELECT * FROM notes")
 	if err != nil {
 		return nil, err
 	}

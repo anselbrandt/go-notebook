@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"time"
 
+	"go-notes/data"
 	"go-notes/env"
 	"go-notes/handlers"
 
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// Create an instance of Notes containing the connection pool.
-	notes := &handlers.Notebook{DB: db}
+	notes := &handlers.Notebook{Notes: data.NoteStore{DB: db}}
 
 	// Create new serve mux
 	m := mux.NewRouter()
@@ -39,6 +40,9 @@ func main() {
 	get := m.Methods(http.MethodGet).Subrouter()
 
 	get.HandleFunc("/notes", notes.GetAll)
+
+	post := m.Methods(http.MethodPost).Subrouter()
+	post.HandleFunc("/notes", handlers.HealthCheck)
 
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
