@@ -10,8 +10,6 @@ import (
 	"os/signal"
 	"time"
 
-	"path/filepath"
-
 	"go-notes/env"
 	"go-notes/handlers"
 
@@ -26,29 +24,6 @@ type spaHandler struct {
 }
 
 var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
-
-func (spa spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path, err := filepath.Abs(r.URL.Path)
-	if err != nil {
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	path = filepath.Join(spa.staticPath, path)
-
-	_, err = os.Stat(path)
-	if os.IsNotExist(err) {
-		http.ServeFile(w, r, filepath.Join(spa.staticPath, spa.indexPath))
-		return
-	} else if err != nil {
-
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	http.FileServer(http.Dir(spa.staticPath)).ServeHTTP(w, r)
-}
 
 func main() {
 
@@ -75,7 +50,7 @@ func main() {
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 	})
 
-	spa := spaHandler{staticPath: "frontend/build", indexPath: "index.html"}
+	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
 	m.PathPrefix("/").Handler(spa)
 
