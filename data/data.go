@@ -9,6 +9,20 @@ type Note struct {
 	Contents string
 }
 
+func Init(db *sql.DB) error {
+	stmt, err := db.Prepare(`
+	CREATE TABLE IF NOT EXISTS "notes" (
+		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"contents" TEXT
+	);
+	`)
+	if err != nil {
+		return err
+	}
+	stmt.Exec()
+	return nil
+}
+
 func AllNotes(db *sql.DB) ([]Note, error) {
 	rows, err := db.Query("SELECT * FROM notes")
 	if err != nil {
