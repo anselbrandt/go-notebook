@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -41,9 +40,7 @@ func main() {
 
 	get.HandleFunc("/notes", notes.GetAll)
 
-	m.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
-	})
+	get.HandleFunc("/api/health", handlers.HealthCheck)
 
 	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
