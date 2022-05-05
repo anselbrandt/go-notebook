@@ -13,6 +13,7 @@ import (
 	"go-notes/env"
 	"go-notes/handlers"
 
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/mux"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -41,6 +42,8 @@ func main() {
 	// Create new serve mux
 	m := mux.NewRouter()
 
+	m.Use(middleware.Logger)
+
 	get := m.Methods(http.MethodGet).Subrouter()
 
 	get.HandleFunc("/notes", notes.GetAll)
@@ -52,7 +55,9 @@ func main() {
 
 	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
-	m.PathPrefix("/").Handler(spa)
+	// m.PathPrefix("/").Handler(spa)
+
+	get.HandleFunc("/", spa.ServeHTTP)
 
 	// create a new server
 	s := http.Server{

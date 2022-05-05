@@ -13,6 +13,7 @@ type SpaHandler struct {
 }
 
 func (spa *SpaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
 	path, err := filepath.Abs(r.URL.Path)
 	if err != nil {
 
