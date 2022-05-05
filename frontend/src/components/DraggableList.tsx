@@ -3,6 +3,7 @@ import { useSprings, animated, config } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
 import { clamp, swap } from "../utils";
+import { cssGrad } from "../colors";
 
 const fn =
   (order: number[], active = false, originalIndex = 0, curIndex = 0, y = 0) =>
@@ -47,6 +48,7 @@ export default function DraggableList({ items }: { items: string[] }) {
           {...bind(i)}
           key={i}
           style={{
+            background: `${cssGrad(50, 95, 60)}`,
             zIndex,
             boxShadow: shadow.to(
               (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
