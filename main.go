@@ -54,6 +54,9 @@ func main() {
 	put := m.Methods(http.MethodPut).Subrouter()
 	put.HandleFunc("/notes", notes.Update)
 
+	delete := m.Methods(http.MethodDelete).Subrouter()
+	delete.HandleFunc("/notes", notes.Delete)
+
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
 	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}

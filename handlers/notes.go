@@ -90,3 +90,21 @@ func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(note)
 
 }
+
+func (notebook *Notebook) Delete(w http.ResponseWriter, r *http.Request) {
+	var n data.Note
+	err := json.NewDecoder(r.Body).Decode(&n)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+	_, addErr := notebook.Notes.Delete(n)
+	if addErr != nil {
+		log.Println(addErr.Error())
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(n)
+
+}
