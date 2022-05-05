@@ -97,3 +97,41 @@ func (store NoteStore) Add(note Note) (int64, error) {
 	}
 	return rowid, nil
 }
+
+func (store NoteStore) Update(note Note) (int64, error) {
+	stmt, err := store.DB.Prepare(`
+	UPDATE notes SET contents=?, updatedAt=? WHERE id=?
+	`)
+	if err != nil {
+		return 0, err
+	}
+	t := time.Now().Unix()
+	result, err := stmt.Exec(note.Contents, t, note.ID)
+	if err != nil {
+		return 0, err
+	}
+	rowid, err := result.LastInsertId()
+	if err != nil {
+		return rowid, err
+	}
+	return rowid, nil
+}
+
+func (store NoteStore) Touch(note Note) (int64, error) {
+	stmt, err := store.DB.Prepare(`
+	UPDATE notes SET updatedAt=? WHERE id=?
+	`)
+	if err != nil {
+		return 0, err
+	}
+	t := time.Now().Unix()
+	result, err := stmt.Exec(t, note.ID)
+	if err != nil {
+		return 0, err
+	}
+	rowid, err := result.LastInsertId()
+	if err != nil {
+		return rowid, err
+	}
+	return rowid, nil
+}

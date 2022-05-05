@@ -51,13 +51,14 @@ func main() {
 	post := m.Methods(http.MethodPost).Subrouter()
 	post.HandleFunc("/notes", notes.Add)
 
+	put := m.Methods(http.MethodPut).Subrouter()
+	put.HandleFunc("/notes", notes.Update)
+
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
 	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
-	// m.PathPrefix("/").Handler(spa)
-
-	get.HandleFunc("/", spa.ServeHTTP)
+	m.PathPrefix("/").Handler(spa)
 
 	// create a new server
 	s := http.Server{

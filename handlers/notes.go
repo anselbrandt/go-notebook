@@ -55,3 +55,38 @@ func (notebook *Notebook) Add(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(note)
 
 }
+
+func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
+	var n data.Note
+	err := json.NewDecoder(r.Body).Decode(&n)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	var rowid int64
+	var addErr error
+
+	if len(n.Contents) == 0 {
+		rowid, addErr = notebook.Notes.Touch(n)
+	} else {
+		rowid, addErr = notebook.Notes.Update(n)
+	}
+
+	if addErr != nil {
+		log.Println(addErr.Error())
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	note, getErr := notebook.Notes.Get(rowid)
+	if getErr != nil {
+		log.Println(getErr.Error())
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(note)
+
+}
