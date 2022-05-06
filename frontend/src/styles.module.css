@@ -8,13 +8,21 @@
   height: 80px;
   transform-origin: 50% 50% 0px;
   border-radius: 5px;
-  color: white;
   line-height: 40px;
   padding-left: 32px;
   font-size: 14.5px;
   text-transform: uppercase;
   letter-spacing: 2px;
   touch-action: none;
+}
+
+.card {
+  color: white;
+}
+
+.cardClose:hover {
+  color: midnightblue;
+  cursor: pointer;
 }
 
 /* .content > div:nth-child(1) {
