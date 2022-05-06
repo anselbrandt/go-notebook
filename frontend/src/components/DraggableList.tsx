@@ -43,6 +43,26 @@ export default function DraggableList({ items }: { items: Note[] }) {
     if (!active) order.current = newOrder;
   });
 
+  const createHandler = () => {
+    alert("creating new task");
+  };
+
+  const aboutHandler = () => {
+    alert("about");
+  };
+
+  const cancelHandler = () => {
+    alert("cancelled");
+  };
+
+  const addHandler = () => {
+    alert("new task added");
+  };
+
+  const deleteHandler = () => {
+    alert("are yout sure?");
+  };
+
   return (
     <div>
       <div
@@ -52,6 +72,7 @@ export default function DraggableList({ items }: { items: Note[] }) {
         }}
       >
         <div
+          onClick={createHandler}
           className={styles.circleButton}
           style={{
             background: `${cssGrad(50, 70, 60)}`,
@@ -60,6 +81,7 @@ export default function DraggableList({ items }: { items: Note[] }) {
           <div>╋</div>
         </div>
         <div
+          onClick={aboutHandler}
           className={styles.circleButton}
           style={{
             background: `${cssGrad(50, 70, 60)}`,
@@ -71,10 +93,10 @@ export default function DraggableList({ items }: { items: Note[] }) {
       <div>
         <div className={styles.inputBox}>Text Input</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div className={styles.actionButton}>
+          <div onClick={cancelHandler} className={styles.actionButton}>
             <div>Cancel</div>
           </div>
-          <div className={styles.actionButton}>
+          <div onClick={addHandler} className={styles.actionButton}>
             <div>Add</div>
           </div>
         </div>
@@ -95,7 +117,7 @@ export default function DraggableList({ items }: { items: Note[] }) {
                 scale,
               }}
             >
-              <Card item={items[i]} />
+              <Card deleteHandler={deleteHandler} item={items[i]} />
             </animated.div>
           );
         })}

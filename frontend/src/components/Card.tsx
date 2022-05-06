@@ -2,7 +2,12 @@ import React from "react";
 import { Note } from "../types";
 import styles from "../styles.module.css";
 
-export default function Card({ item }: { item: Note }) {
+interface CardProps {
+  item: Note;
+  deleteHandler: () => void;
+}
+
+const Card: React.FC<CardProps> = ({ item }: CardProps) => {
   return (
     <div
       className={styles.card}
@@ -20,4 +25,6 @@ export default function Card({ item }: { item: Note }) {
       </div>
     </div>
   );
-}
+};
+
+export default Card;
