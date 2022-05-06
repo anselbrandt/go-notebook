@@ -52,17 +52,20 @@ export default function DraggableList({ items }: { items: Note[] }) {
         }}
       >
         <div
-          className={styles.plusButton}
+          className={styles.circleButton}
           style={{
-            marginBottom: "12px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: "20px",
             background: `${cssGrad(50, 70, 60)}`,
           }}
         >
           <div>╋</div>
+        </div>
+        <div
+          className={styles.circleButton}
+          style={{
+            background: `${cssGrad(50, 70, 60)}`,
+          }}
+        >
+          <div style={{ fontSize: "28px" }}>?</div>
         </div>
       </div>
       <div>
