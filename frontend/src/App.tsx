@@ -14,6 +14,9 @@ function App() {
       const response = await fetch("http://localhost:9090/notes");
       const json = await response.json();
       setData(json);
+      if (json !== null) {
+        setIsShown(false);
+      }
     };
     fetchData();
   }, []);
@@ -43,6 +46,7 @@ function App() {
       addNote(note);
       setValue(undefined);
       setIsShown(false);
+      window.location.reload();
     }
   };
 
@@ -58,6 +62,7 @@ function App() {
       });
     };
     deleteNote();
+    window.location.reload();
   };
 
   return (

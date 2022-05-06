@@ -7,6 +7,11 @@ import { cssGrad } from "../utils/colors";
 import Card from "./Card";
 import { Note } from "../types";
 
+interface DraggableProps {
+  items: Note[];
+  deleteHandler: (id: number) => void;
+}
+
 const fn =
   (order: number[], active = false, originalIndex = 0, curIndex = 0, y = 0) =>
   (index: number) =>
@@ -28,14 +33,11 @@ const fn =
           immediate: false,
         };
 
-interface DraggableProps {
-  items: Note[];
-  deleteHandler: (id: number) => void;
-}
-
 const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
+
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
+
   const bind = useDrag(({ args: [originalIndex], active, movement: [, y] }) => {
     const curIndex = order.current.indexOf(originalIndex);
     const curRow = clamp(
