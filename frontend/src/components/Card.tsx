@@ -7,7 +7,7 @@ interface CardProps {
   deleteHandler: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ item }: CardProps) => {
+const Card: React.FC<CardProps> = ({ item, deleteHandler }: CardProps) => {
   return (
     <div
       className={styles.card}
@@ -15,6 +15,7 @@ const Card: React.FC<CardProps> = ({ item }: CardProps) => {
     >
       <div>{item["Contents"]}</div>
       <div
+        onClick={deleteHandler}
         className={styles.cardClose}
         style={{
           marginRight: "10px",
