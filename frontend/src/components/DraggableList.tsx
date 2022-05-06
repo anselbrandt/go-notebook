@@ -3,7 +3,7 @@ import { useSprings, animated, config } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
 import { clamp, swap } from "../utils";
-import { cssGrad } from "../colors";
+import { cssGrad } from "../utils/colors";
 import Card from "./Card";
 import { Note } from "../types";
 
