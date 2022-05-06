@@ -16,7 +16,7 @@
   touch-action: none;
 }
 
-.addButton {
+.plusButton {
   color: white;
   height: 40px;
   width: 40px;
@@ -26,6 +26,37 @@
 .addButton:hover {
   color: midnightblue;
   cursor: pointer;
+}
+
+.inputBox {
+  width: 320px;
+  height: 80px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: lightgray;
+  line-height: 40px;
+  padding-left: 32px;
+  font-size: 14.5px;
+  letter-spacing: 2px;
+}
+
+.actionButton {
+  color: midnightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 32px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: lightgray;
+  font-size: 14.5px;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  margin-bottom: 24px;
 }
 
 .card {

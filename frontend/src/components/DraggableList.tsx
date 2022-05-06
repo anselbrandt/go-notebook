@@ -52,7 +52,7 @@ export default function DraggableList({ items }: { items: Note[] }) {
         }}
       >
         <div
-          className={styles.addButton}
+          className={styles.plusButton}
           style={{
             marginBottom: "12px",
             display: "flex",
@@ -63,6 +63,17 @@ export default function DraggableList({ items }: { items: Note[] }) {
           }}
         >
           <div>╋</div>
+        </div>
+      </div>
+      <div>
+        <div className={styles.inputBox}>Text Input</div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className={styles.actionButton}>
+            <div>Cancel</div>
+          </div>
+          <div className={styles.actionButton}>
+            <div>Add</div>
+          </div>
         </div>
       </div>
       <div className={styles.content} style={{ height: items.length * 100 }}>
