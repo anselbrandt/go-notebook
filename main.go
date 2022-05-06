@@ -57,21 +57,25 @@ func main() {
 	put.HandleFunc("/notes", notes.Update)
 
 	delete := m.Methods(http.MethodDelete).Subrouter()
-	delete.HandleFunc("/notes", notes.Delete)
+	delete.HandleFunc("/notes/{id:[0-9]+}", notes.Delete)
 
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
-	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
+	// spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
-	m.PathPrefix("/").Handler(spa)
+	// m.PathPrefix("/").Handler(spa)
 
 	// CORS
-	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000", "https://anselbrandt.dev", "https://www.anselbrandt.dev"}))
+	// ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000", "https://anselbrandt.dev", "https://www.anselbrandt.dev"}))
+	methods := gohandlers.AllowedMethods([]string{"OPTIONS", "DELETE", "GET", "HEAD", "POST", "PUT", "PATCH"})
+	origins := gohandlers.AllowedOrigins([]string{"*"})
+	headers := gohandlers.AllowedHeaders([]string{"Content-Type"})
+	ch := gohandlers.CORS(methods, origins, headers)
 
 	// create a new server
 	s := http.Server{
 		Addr:         *bindAddress,      // configure the bind address
-		Handler:      ch(m),                 // set the default handler
+		Handler:      ch(m),             // set the default handler
 		ErrorLog:     l,                 // set the logger for the server
 		ReadTimeout:  5 * time.Second,   // max time to read request from the client
 		WriteTimeout: 10 * time.Second,  // max time to write response to the client

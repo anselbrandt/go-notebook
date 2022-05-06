@@ -17,15 +17,17 @@ body {
   box-sizing: border-box;
 }
 
-.flex {
-  display: flex;
-  align-items: center;
-}
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
 
-.flex.fill {
-  height: 100%;
-}
+  font-size: 14.5px;
+  letter-spacing: 2px;
 
-.flex.center {
-  justify-content: center;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
 }

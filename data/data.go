@@ -136,14 +136,14 @@ func (store NoteStore) Touch(note Note) (int64, error) {
 	return rowid, nil
 }
 
-func (store NoteStore) Delete(note Note) (int64, error) {
+func (store NoteStore) Delete(id int) (int64, error) {
 	stmt, err := store.DB.Prepare(`
 	DELETE FROM notes WHERE id=?
 	`)
 	if err != nil {
 		return 0, err
 	}
-	result, err := stmt.Exec(note.ID)
+	result, err := stmt.Exec(id)
 	if err != nil {
 		return 0, err
 	}

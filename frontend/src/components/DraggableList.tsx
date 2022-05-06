@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSprings, animated, config } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
@@ -43,64 +43,19 @@ export default function DraggableList({ items }: { items: Note[] }) {
     if (!active) order.current = newOrder;
   });
 
-  const createHandler = () => {
-    alert("creating new task");
-  };
-
-  const aboutHandler = () => {
-    alert("about");
-  };
-
-  const cancelHandler = () => {
-    alert("cancelled");
-  };
-
-  const addHandler = () => {
-    alert("new task added");
-  };
-
   const deleteHandler = (id: number) => {
-    alert(`delete id=${id}?`);
+    const deleteNote = async () => {
+      const response = await fetch(`http://localhost:9090/notes/${id}`, {
+        method: "DELETE",
+      });
+      const text = await response.text();
+      console.log(text);
+    };
+    deleteNote();
   };
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          onClick={createHandler}
-          className={styles.circleButton}
-          style={{
-            background: `${cssGrad(50, 70, 60)}`,
-          }}
-        >
-          <div>╋</div>
-        </div>
-        <div
-          onClick={aboutHandler}
-          className={styles.circleButton}
-          style={{
-            background: `${cssGrad(50, 70, 60)}`,
-          }}
-        >
-          <div style={{ fontSize: "28px" }}>?</div>
-        </div>
-      </div>
-      <div>
-        <div className={styles.inputBox}>Text Input</div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div onClick={cancelHandler} className={styles.actionButton}>
-            <div>Cancel</div>
-          </div>
-          <div onClick={addHandler} className={styles.actionButton}>
-            <div>Add</div>
-          </div>
-        </div>
-      </div>
       <div className={styles.content} style={{ height: items.length * 100 }}>
         {springs.map(({ zIndex, shadow, y, scale }, i) => {
           return (

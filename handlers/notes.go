@@ -5,6 +5,9 @@ import (
 	"go-notes/data"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type Notebook struct {
@@ -91,20 +94,29 @@ func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (notebook *Notebook) Delete(w http.ResponseWriter, r *http.Request) {
-	var n data.Note
-	err := json.NewDecoder(r.Body).Decode(&n)
+func getNoteID(r *http.Request) int {
+	vars := mux.Vars(r)
+
+	// convert the id into an integer and return
+	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "", http.StatusBadRequest)
-		return
+		// should never happen
+		panic(err)
 	}
-	_, addErr := notebook.Notes.Delete(n)
+
+	return id
+}
+
+func (notebook *Notebook) Delete(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	id := getNoteID(r)
+
+	_, addErr := notebook.Notes.Delete(id)
 	if addErr != nil {
 		log.Println(addErr.Error())
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(n)
+	json.NewEncoder(w).Encode(id)
 
 }
