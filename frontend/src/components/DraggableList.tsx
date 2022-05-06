@@ -4,6 +4,8 @@ import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
 import { clamp, swap } from "../utils";
 import { cssGrad } from "../colors";
+import Card from "./Card";
+import { Note } from "../types";
 
 const fn =
   (order: number[], active = false, originalIndex = 0, curIndex = 0, y = 0) =>
@@ -26,7 +28,7 @@ const fn =
           immediate: false,
         };
 
-export default function DraggableList({ items }: { items: string[] }) {
+export default function DraggableList({ items }: { items: Note[] }) {
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
   const bind = useDrag(({ args: [originalIndex], active, movement: [, y] }) => {
@@ -43,22 +45,25 @@ export default function DraggableList({ items }: { items: string[] }) {
 
   return (
     <div className={styles.content} style={{ height: items.length * 100 }}>
-      {springs.map(({ zIndex, shadow, y, scale }, i) => (
-        <animated.div
-          {...bind(i)}
-          key={i}
-          style={{
-            background: `${cssGrad(50, 95, 60)}`,
-            zIndex,
-            boxShadow: shadow.to(
-              (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
-            ),
-            y,
-            scale,
-          }}
-          children={items[i]}
-        />
-      ))}
+      {springs.map(({ zIndex, shadow, y, scale }, i) => {
+        return (
+          <animated.div
+            {...bind(i)}
+            key={i}
+            style={{
+              background: `${cssGrad(50, 70, 60)}`,
+              zIndex,
+              boxShadow: shadow.to(
+                (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
+              ),
+              y,
+              scale,
+            }}
+          >
+            <Card item={items[i]} />
+          </animated.div>
+        );
+      })}
     </div>
   );
 }

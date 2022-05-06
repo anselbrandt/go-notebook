@@ -15,7 +15,7 @@ function App() {
   }, []);
   return (
     <div className="flex fill center">
-      {data && <DraggableList items={data.map((item) => item.Contents)} />}
+      {data && <DraggableList items={data} />}
     </div>
   );
 }

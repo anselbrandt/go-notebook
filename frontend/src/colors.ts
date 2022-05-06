@@ -5,26 +5,16 @@ const SV_MAX: any = 100;
 export const cssGrad = (
   hueDiff: number,
   saturation: number = 75,
-  lightness: number = 50
+  lightness: number = 50,
+  initialHue: number = Math.round(Math.random() * 360)
 ) => {
-  const [a, b] = gradPair(hueDiff, saturation, lightness);
-  return `linear-gradient(135deg, ${a} 0%, ${b} 100%)`;
-};
-
-// gradPair generates a pair of hex colors
-// `linear-gradient(135deg, ${v[0]} 0%, ${v[1]} 100%)`
-
-export const gradPair = (
-  hueDiff: number,
-  saturation: number = 75,
-  lightness: number = 50
-) => {
-  const a = Math.round(Math.random() * 360);
+  const a = initialHue;
   const b = a + hueDiff > 360 ? a + hueDiff - 360 : a + hueDiff;
-  return [
-    hslToHex([a, saturation, lightness]),
-    hslToHex([b, saturation, lightness]),
-  ];
+  return `linear-gradient(135deg, ${hslToHex([
+    a,
+    saturation,
+    lightness,
+  ])} 0%, ${hslToHex([b, saturation, lightness])} 100%)`;
 };
 
 export const hslToHex = (hsl: number[]) => {
