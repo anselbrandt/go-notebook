@@ -4,7 +4,7 @@ import styles from "../styles.module.css";
 
 interface CardProps {
   item: Note;
-  deleteHandler: () => void;
+  deleteHandler: (id: number) => void;
 }
 
 const Card: React.FC<CardProps> = ({ item, deleteHandler }: CardProps) => {
@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({ item, deleteHandler }: CardProps) => {
     >
       <div>{item["Contents"]}</div>
       <div
-        onClick={deleteHandler}
+        onClick={() => deleteHandler(item.ID)}
         className={styles.cardClose}
         style={{
           marginRight: "10px",

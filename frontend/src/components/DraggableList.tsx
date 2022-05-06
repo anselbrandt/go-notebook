@@ -59,8 +59,8 @@ export default function DraggableList({ items }: { items: Note[] }) {
     alert("new task added");
   };
 
-  const deleteHandler = () => {
-    alert("are yout sure?");
+  const deleteHandler = (id: number) => {
+    alert(`delete id=${id}?`);
   };
 
   return (
