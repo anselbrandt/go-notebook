@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useSprings, animated, config } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
@@ -28,7 +28,12 @@ const fn =
           immediate: false,
         };
 
-export default function DraggableList({ items }: { items: Note[] }) {
+interface DraggableProps {
+  items: Note[];
+  deleteHandler: (id: number) => void;
+}
+
+const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
   const bind = useDrag(({ args: [originalIndex], active, movement: [, y] }) => {
@@ -42,17 +47,6 @@ export default function DraggableList({ items }: { items: Note[] }) {
     api.start(fn(newOrder, active, originalIndex, curIndex, y)); // Feed springs new style data, they'll animate the view without causing a single render
     if (!active) order.current = newOrder;
   });
-
-  const deleteHandler = (id: number) => {
-    const deleteNote = async () => {
-      const response = await fetch(`http://localhost:9090/notes/${id}`, {
-        method: "DELETE",
-      });
-      const text = await response.text();
-      console.log(text);
-    };
-    deleteNote();
-  };
 
   return (
     <div>
@@ -79,4 +73,6 @@ export default function DraggableList({ items }: { items: Note[] }) {
       </div>
     </div>
   );
-}
+};
+
+export default DraggableList;

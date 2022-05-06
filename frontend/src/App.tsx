@@ -33,16 +33,10 @@ function App() {
 
   const addHandler = () => {
     const addNote = async (note: {}) => {
-      const response = await fetch("http://localhost:9090/notes", {
+      await fetch("http://localhost:9090/notes", {
         method: "POST",
         body: JSON.stringify(note),
       });
-      const json: Note = await response.json();
-      if (data) {
-        setData((prev) => [...(prev as Note[]), json]);
-      } else {
-        setData([json]);
-      }
     };
     if (value !== undefined) {
       const note = { contents: value };
@@ -55,6 +49,15 @@ function App() {
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = event.target.value;
     setValue(input);
+  };
+
+  const deleteHandler = (id: number) => {
+    const deleteNote = async () => {
+      await fetch(`http://localhost:9090/notes/${id}`, {
+        method: "DELETE",
+      });
+    };
+    deleteNote();
   };
 
   return (
@@ -108,7 +111,7 @@ function App() {
           </div>
         </div>
       )}
-      {data && <DraggableList items={data} />}
+      {data && <DraggableList items={data} deleteHandler={deleteHandler} />}
     </div>
   );
 }
