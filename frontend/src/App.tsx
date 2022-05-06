@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import DraggableList from "./components/DraggableList";
 import { Note } from "./types";
 import { cssGrad } from "./utils/colors";
@@ -86,7 +86,7 @@ function App() {
           onClick={createHandler}
           className={styles.circleButton}
           style={{
-            background: `${cssGrad(50, 70, 60)}`,
+            background: `${useMemo(() => cssGrad(50, 70, 60), [])}`,
           }}
         >
           <div>╋</div>
@@ -95,7 +95,7 @@ function App() {
           onClick={aboutHandler}
           className={styles.circleButton}
           style={{
-            background: `${cssGrad(50, 70, 60)}`,
+            background: `${useMemo(() => cssGrad(50, 70, 60), [])}`,
           }}
         >
           <div style={{ fontSize: "28px" }}>?</div>

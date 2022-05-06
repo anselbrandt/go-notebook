@@ -59,7 +59,19 @@ const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
               {...bind(i)}
               key={i}
               style={{
-                background: `${cssGrad(50, 70, 60)}`,
+                background: `${cssGrad(
+                  50,
+                  70,
+                  60,
+                  parseInt(
+                    items[i]["CreatedAt"]
+                      .toString()
+                      .slice(-3)
+                      .split("")
+                      .reverse()
+                      .join("")
+                  ) % 360
+                )}`,
                 zIndex,
                 boxShadow: shadow.to(
                   (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
