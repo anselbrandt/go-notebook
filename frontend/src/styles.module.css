@@ -16,6 +16,18 @@
   touch-action: none;
 }
 
+.addButton {
+  color: white;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.addButton:hover {
+  color: midnightblue;
+  cursor: pointer;
+}
+
 .card {
   color: white;
 }

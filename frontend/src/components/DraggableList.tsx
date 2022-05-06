@@ -44,26 +44,48 @@ export default function DraggableList({ items }: { items: Note[] }) {
   });
 
   return (
-    <div className={styles.content} style={{ height: items.length * 100 }}>
-      {springs.map(({ zIndex, shadow, y, scale }, i) => {
-        return (
-          <animated.div
-            {...bind(i)}
-            key={i}
-            style={{
-              background: `${cssGrad(50, 70, 60)}`,
-              zIndex,
-              boxShadow: shadow.to(
-                (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
-              ),
-              y,
-              scale,
-            }}
-          >
-            <Card item={items[i]} />
-          </animated.div>
-        );
-      })}
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          className={styles.addButton}
+          style={{
+            marginBottom: "12px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "20px",
+            background: `${cssGrad(50, 70, 60)}`,
+          }}
+        >
+          <div>╋</div>
+        </div>
+      </div>
+      <div className={styles.content} style={{ height: items.length * 100 }}>
+        {springs.map(({ zIndex, shadow, y, scale }, i) => {
+          return (
+            <animated.div
+              {...bind(i)}
+              key={i}
+              style={{
+                background: `${cssGrad(50, 70, 60)}`,
+                zIndex,
+                boxShadow: shadow.to(
+                  (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
+                ),
+                y,
+                scale,
+              }}
+            >
+              <Card item={items[i]} />
+            </animated.div>
+          );
+        })}
+      </div>
     </div>
   );
 }
