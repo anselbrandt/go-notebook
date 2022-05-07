@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSprings, animated, config } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import styles from "../styles.module.css";
@@ -8,7 +8,7 @@ import Card from "./Card";
 import { Note } from "../types";
 
 interface DraggableProps {
-  items: Note[];
+  data: Note[];
   deleteHandler: (id: number) => void;
 }
 
@@ -33,7 +33,8 @@ const fn =
           immediate: false,
         };
 
-const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
+const DraggableList: React.FC<DraggableProps> = ({ data, deleteHandler }) => {
+  const [items, setItems] = useState(data);
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
 
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
@@ -50,41 +51,44 @@ const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
     if (!active) order.current = newOrder;
   });
 
+  useEffect(() => {
+    setItems(data);
+    order.current = data.map((_, index) => index);
+  }, [data]);
+
   return (
-    <div>
-      <div className={styles.content} style={{ height: items.length * 100 }}>
-        {springs.map(({ zIndex, shadow, y, scale }, i) => {
-          return (
-            <animated.div
-              {...bind(i)}
-              key={i}
-              style={{
-                background: `${cssGrad(
-                  50,
-                  70,
-                  60,
-                  parseInt(
-                    items[i]["CreatedAt"]
-                      .toString()
-                      .slice(-3)
-                      .split("")
-                      .reverse()
-                      .join("")
-                  ) % 360
-                )}`,
-                zIndex,
-                boxShadow: shadow.to(
-                  (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
-                ),
-                y,
-                scale,
-              }}
-            >
-              <Card deleteHandler={deleteHandler} item={items[i]} />
-            </animated.div>
-          );
-        })}
-      </div>
+    <div className={styles.content} style={{ height: items.length * 100 }}>
+      {springs.map(({ zIndex, shadow, y, scale }, i) => {
+        return (
+          <animated.div
+            {...bind(i)}
+            key={i}
+            style={{
+              background: `${cssGrad(
+                50,
+                70,
+                60,
+                parseInt(
+                  items[i]["CreatedAt"]
+                    .toString()
+                    .slice(-3)
+                    .split("")
+                    .reverse()
+                    .join("")
+                ) % 360
+              )}`,
+              zIndex,
+              boxShadow: shadow.to(
+                (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`
+              ),
+              y,
+              scale,
+            }}
+          >
+            <Card deleteHandler={deleteHandler} item={items[i]} />
+          </animated.div>
+        );
+      })}
     </div>
   );
 };

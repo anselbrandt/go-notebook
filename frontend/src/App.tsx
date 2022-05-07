@@ -5,7 +5,7 @@ import { cssGrad } from "./utils/colors";
 import styles from "./styles.module.css";
 
 function App() {
-  const [data, setData] = useState<Note[]>();
+  const [data, setData] = useState<Note[] | undefined>();
   const [value, setValue] = useState<string>();
   const [isShown, setIsShown] = useState(data === undefined);
 
@@ -36,17 +36,22 @@ function App() {
 
   const addHandler = () => {
     const addNote = async (note: {}) => {
-      await fetch("http://localhost:9090/notes", {
+      const response = await fetch("http://localhost:9090/notes", {
         method: "POST",
         body: JSON.stringify(note),
       });
+      const newNote: Note = await response.json();
+      if (data) {
+        setData((prev) => [...(prev as Note[]), newNote]);
+      } else {
+        setData([newNote]);
+      }
     };
     if (value !== undefined) {
       const note = { contents: value };
       addNote(note);
       setValue(undefined);
       setIsShown(false);
-      window.location.reload();
     }
   };
 
@@ -62,7 +67,7 @@ function App() {
       });
     };
     deleteNote();
-    window.location.reload();
+    setData((prev) => [...(prev as Note[])].filter((note) => note.ID !== id));
   };
 
   return (
@@ -116,7 +121,7 @@ function App() {
           </div>
         </div>
       )}
-      {data && <DraggableList items={data} deleteHandler={deleteHandler} />}
+      {data && <DraggableList data={data} deleteHandler={deleteHandler} />}
     </div>
   );
 }
