@@ -13,6 +13,7 @@
   font-size: 14.5px;
   letter-spacing: 2px;
   touch-action: none;
+  overflow: scroll;
 }
 
 .circleButton {
