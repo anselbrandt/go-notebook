@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import DraggableList from "./components/DraggableList";
 import { Note } from "./types";
 import { cssGrad } from "./utils/colors";
 import styles from "./styles.module.css";
 
 function App() {
+  const textareaRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<Note[] | undefined>();
   const [value, setValue] = useState<string>();
   const [isShown, setIsShown] = useState(data === undefined);
@@ -20,6 +21,12 @@ function App() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (isShown) {
+      textareaRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isShown]);
 
   const createHandler = () => {
     setIsShown(true);
@@ -106,8 +113,10 @@ function App() {
           <div style={{ fontSize: "28px" }}>?</div>
         </div>
       </div>
+
+      {data && <DraggableList data={data} deleteHandler={deleteHandler} />}
       {isShown && (
-        <div>
+        <div ref={textareaRef}>
           <div className={styles.inputBox} style={{ display: "flex" }}>
             <textarea onChange={handleChange} />
           </div>
@@ -121,7 +130,6 @@ function App() {
           </div>
         </div>
       )}
-      {data && <DraggableList data={data} deleteHandler={deleteHandler} />}
     </div>
   );
 }

@@ -48,12 +48,20 @@ const DraggableList: React.FC<DraggableProps> = ({ data, deleteHandler }) => {
     );
     const newOrder = swap(order.current, curIndex, curRow);
     api.start(fn(newOrder, active, originalIndex, curIndex, y)); // Feed springs new style data, they'll animate the view without causing a single render
-    if (!active) order.current = newOrder;
+    if (!active) {
+      setItems(data);
+      order.current = newOrder;
+      // api call here
+      console.log("reorder", newOrder);
+    }
   });
 
   useEffect(() => {
     setItems(data);
-    order.current = data.map((_, index) => index);
+    const newOrder = data.map((_, index) => index);
+    // api.start(fn(newOrder))
+    order.current = newOrder;
+    console.log("add/remove", newOrder);
   }, [data]);
 
   return (
