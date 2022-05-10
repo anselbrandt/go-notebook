@@ -10,6 +10,7 @@ import { Note } from "../types";
 interface DraggableProps {
   items: Note[];
   handleDelete: (id: number) => void;
+  handleSort: (newOrder: number[]) => void;
 }
 
 const fn =
@@ -33,7 +34,11 @@ const fn =
           immediate: false,
         };
 
-const DraggableList: React.FC<DraggableProps> = ({ items, handleDelete }) => {
+const DraggableList: React.FC<DraggableProps> = ({
+  items,
+  handleDelete,
+  handleSort,
+}) => {
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
 
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
@@ -50,7 +55,7 @@ const DraggableList: React.FC<DraggableProps> = ({ items, handleDelete }) => {
     if (!active) {
       order.current = newOrder;
       // api reorder call here
-      console.log("reorder", newOrder);
+      handleSort(newOrder);
     }
   });
 

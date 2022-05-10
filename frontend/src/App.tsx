@@ -9,6 +9,7 @@ function App() {
   const [data, setData] = useState<Note[] | undefined>();
   const [value, setValue] = useState<string>();
   const [isShown, setIsShown] = useState(data === undefined);
+  const [order, setOrder] = useState<number[] | undefined>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +45,13 @@ function App() {
       });
       const newNote: Note = await response.json();
       if (data) {
-        setData((prev) => [...(prev as Note[]), newNote]);
+        if (order) {
+          setData((prev) => {
+            return [...order.map((i) => [...(prev as Note[])][i]), newNote];
+          });
+        } else {
+          setData((prev) => [...(prev as Note[]), newNote]);
+        }
       } else {
         setData([newNote]);
       }
@@ -70,6 +77,10 @@ function App() {
     };
     deleteNote();
     setData((prev) => [...(prev as Note[])].filter((note) => note.ID !== id));
+  };
+
+  const handleSort = (newOrder: number[]) => {
+    setOrder(newOrder);
   };
 
   return (
@@ -109,7 +120,13 @@ function App() {
         </div>
       </div>
 
-      {data && <DraggableList items={data} handleDelete={handleDelete} />}
+      {data && (
+        <DraggableList
+          items={data}
+          handleDelete={handleDelete}
+          handleSort={handleSort}
+        />
+      )}
       {isShown && (
         <div ref={textareaRef}>
           <div className={styles.inputBox} style={{ display: "flex" }}>
