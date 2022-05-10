@@ -8,7 +8,7 @@ import Card from "./Card";
 import { Note } from "../types";
 
 interface DraggableProps {
-  data: Note[];
+  items: Note[];
   deleteHandler: (id: number) => void;
 }
 
@@ -33,8 +33,8 @@ const fn =
           immediate: false,
         };
 
-const DraggableList: React.FC<DraggableProps> = ({ data, deleteHandler }) => {
-  const [items, setItems] = useState(data);
+const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
+  // const [items, setItems] = useState(data);
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
 
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
@@ -49,20 +49,18 @@ const DraggableList: React.FC<DraggableProps> = ({ data, deleteHandler }) => {
     const newOrder = swap(order.current, curIndex, curRow);
     api.start(fn(newOrder, active, originalIndex, curIndex, y)); // Feed springs new style data, they'll animate the view without causing a single render
     if (!active) {
-      setItems(data);
       order.current = newOrder;
-      // api call here
+      // api reorder call here
       console.log("reorder", newOrder);
     }
   });
 
   useEffect(() => {
-    setItems(data);
-    const newOrder = data.map((_, index) => index);
-    // api.start(fn(newOrder))
+    const newOrder = items.map((_, index) => index);
+    api.start(fn(newOrder));
     order.current = newOrder;
-    console.log("add/remove", newOrder);
-  }, [data]);
+    console.log("mutate", newOrder);
+  }, [items]);
 
   return (
     <div className={styles.content} style={{ height: items.length * 100 }}>

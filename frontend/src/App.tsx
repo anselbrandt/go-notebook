@@ -22,13 +22,8 @@ function App() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (isShown) {
-      textareaRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [isShown]);
-
   const createHandler = () => {
+    textareaRef.current?.scrollIntoView({ behavior: "smooth" });
     setIsShown(true);
   };
 
@@ -114,7 +109,7 @@ function App() {
         </div>
       </div>
 
-      {data && <DraggableList data={data} deleteHandler={deleteHandler} />}
+      {data && <DraggableList items={data} deleteHandler={deleteHandler} />}
       {isShown && (
         <div ref={textareaRef}>
           <div className={styles.inputBox} style={{ display: "flex" }}>
