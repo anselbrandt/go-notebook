@@ -33,7 +33,7 @@ func (store NoteStore) Init() error {
 }
 
 func (store NoteStore) GetAll() ([]Note, error) {
-	rows, err := store.DB.Query("SELECT * FROM notes")
+	rows, err := store.DB.Query("SELECT * FROM notes ORDER BY updatedAt;")
 	if err != nil {
 		return nil, err
 	}

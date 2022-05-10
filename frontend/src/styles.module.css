@@ -8,12 +8,21 @@
   height: 80px;
   transform-origin: 50% 50% 0px;
   border-radius: 5px;
+  touch-action: none;
+  overflow: scroll;
+}
+
+.cardMain {
   line-height: 40px;
   padding-left: 32px;
   font-size: 14.5px;
   letter-spacing: 2px;
-  touch-action: none;
-  overflow: scroll;
+}
+
+.cardSub {
+  font-size: 12px;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .circleButton {
