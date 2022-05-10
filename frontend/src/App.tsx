@@ -80,6 +80,7 @@ function App() {
   };
 
   const handleSort = (newOrder: number[]) => {
+    // api call to backend to update sort order
     setOrder(newOrder);
   };
 
