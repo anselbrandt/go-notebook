@@ -9,7 +9,7 @@ import { Note } from "../types";
 
 interface DraggableProps {
   items: Note[];
-  deleteHandler: (id: number) => void;
+  handleDelete: (id: number) => void;
 }
 
 const fn =
@@ -33,8 +33,7 @@ const fn =
           immediate: false,
         };
 
-const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
-  // const [items, setItems] = useState(data);
+const DraggableList: React.FC<DraggableProps> = ({ items, handleDelete }) => {
   const order = useRef(items.map((_, index) => index)); // Store indicies as a local ref, this represents the item order
 
   const [springs, api] = useSprings(items.length, fn(order.current)); // Create springs, each corresponds to an item, controlling its transform, scale, etc.
@@ -91,7 +90,7 @@ const DraggableList: React.FC<DraggableProps> = ({ items, deleteHandler }) => {
               scale,
             }}
           >
-            <Card deleteHandler={deleteHandler} item={items[i]} />
+            <Card handleDelete={handleDelete} item={items[i]} />
           </animated.div>
         );
       })}

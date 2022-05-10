@@ -22,21 +22,21 @@ function App() {
     fetchData();
   }, []);
 
-  const createHandler = () => {
+  const handleCreate = () => {
     textareaRef.current?.scrollIntoView({ behavior: "smooth" });
     setIsShown(true);
   };
 
-  const aboutHandler = () => {
+  const handleAbout = () => {
     alert("about");
   };
 
-  const cancelHandler = () => {
+  const handleCancel = () => {
     setIsShown(false);
     setValue(undefined);
   };
 
-  const addHandler = () => {
+  const handleAdd = () => {
     const addNote = async (note: {}) => {
       const response = await fetch("http://localhost:9090/notes", {
         method: "POST",
@@ -62,7 +62,7 @@ function App() {
     setValue(input);
   };
 
-  const deleteHandler = (id: number) => {
+  const handleDelete = (id: number) => {
     const deleteNote = async () => {
       await fetch(`http://localhost:9090/notes/${id}`, {
         method: "DELETE",
@@ -90,7 +90,7 @@ function App() {
         }}
       >
         <div
-          onClick={createHandler}
+          onClick={handleCreate}
           className={styles.circleButton}
           style={{
             background: `${useMemo(() => cssGrad(50, 70, 60), [])}`,
@@ -99,7 +99,7 @@ function App() {
           <div>╋</div>
         </div>
         <div
-          onClick={aboutHandler}
+          onClick={handleAbout}
           className={styles.circleButton}
           style={{
             background: `${useMemo(() => cssGrad(50, 70, 60), [])}`,
@@ -109,17 +109,17 @@ function App() {
         </div>
       </div>
 
-      {data && <DraggableList items={data} deleteHandler={deleteHandler} />}
+      {data && <DraggableList items={data} handleDelete={handleDelete} />}
       {isShown && (
         <div ref={textareaRef}>
           <div className={styles.inputBox} style={{ display: "flex" }}>
             <textarea onChange={handleChange} />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div onClick={cancelHandler} className={styles.actionButton}>
+            <div onClick={handleCancel} className={styles.actionButton}>
               <div>Cancel</div>
             </div>
-            <div onClick={addHandler} className={styles.actionButton}>
+            <div onClick={handleAdd} className={styles.actionButton}>
               <div>Add</div>
             </div>
           </div>
