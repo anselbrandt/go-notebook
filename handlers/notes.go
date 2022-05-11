@@ -43,13 +43,13 @@ func (notebook *Notebook) Add(w http.ResponseWriter, r *http.Request) {
 	contents := data.Note{
 		Contents: n.Contents,
 	}
-	rowid, addErr := notebook.Notes.Add(contents)
+	id, addErr := notebook.Notes.Add(contents)
 	if addErr != nil {
 		log.Println(addErr.Error())
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
-	note, getErr := notebook.Notes.Get(rowid)
+	note, getErr := notebook.Notes.Get(id)
 	if getErr != nil {
 		log.Println(getErr.Error())
 		http.Error(w, "", http.StatusInternalServerError)
@@ -68,13 +68,13 @@ func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var rowid int64
+	var id int64
 	var addErr error
 
 	if len(n.Contents) == 0 {
-		rowid, addErr = notebook.Notes.Touch(n)
+		id, addErr = notebook.Notes.Touch(n)
 	} else {
-		rowid, addErr = notebook.Notes.Update(n)
+		id, addErr = notebook.Notes.Update(n)
 	}
 
 	if addErr != nil {
@@ -83,7 +83,7 @@ func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	note, getErr := notebook.Notes.Get(rowid)
+	note, getErr := notebook.Notes.Get(id)
 	if getErr != nil {
 		log.Println(getErr.Error())
 		http.Error(w, "", http.StatusInternalServerError)
@@ -91,14 +91,13 @@ func (notebook *Notebook) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(note)
-
 }
 
-func getNoteID(r *http.Request) int {
+func getNoteID(r *http.Request) int64 {
 	vars := mux.Vars(r)
 
-	// convert the id into an integer and return
-	id, err := strconv.Atoi(vars["id"])
+	// convert the id into an int64 and return
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
 	if err != nil {
 		// should never happen
 		panic(err)

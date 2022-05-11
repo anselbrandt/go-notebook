@@ -6,7 +6,7 @@ import (
 )
 
 type Note struct {
-	ID        int
+	ID        int64
 	Contents  string
 	CreatedAt int
 	UpdatedAt int
@@ -60,7 +60,7 @@ func (store NoteStore) GetAll() ([]Note, error) {
 
 func (store NoteStore) Get(rowid int64) (Note, error) {
 	note := Note{}
-	var id int
+	var id int64
 	var contents string
 	var createdAt int
 	var updatedAt int
@@ -106,15 +106,11 @@ func (store NoteStore) Update(note Note) (int64, error) {
 		return 0, err
 	}
 	t := time.Now().Unix()
-	result, err := stmt.Exec(note.Contents, t, note.ID)
+	_, err = stmt.Exec(note.Contents, t, note.ID)
 	if err != nil {
 		return 0, err
 	}
-	rowid, err := result.LastInsertId()
-	if err != nil {
-		return rowid, err
-	}
-	return rowid, nil
+	return note.ID, nil
 }
 
 func (store NoteStore) Touch(note Note) (int64, error) {
@@ -125,18 +121,15 @@ func (store NoteStore) Touch(note Note) (int64, error) {
 		return 0, err
 	}
 	t := time.Now().Unix()
-	result, err := stmt.Exec(t, note.ID)
+	_, err = stmt.Exec(t, note.ID)
 	if err != nil {
 		return 0, err
 	}
-	rowid, err := result.LastInsertId()
-	if err != nil {
-		return rowid, err
-	}
-	return rowid, nil
+
+	return note.ID, nil
 }
 
-func (store NoteStore) Delete(id int) (int64, error) {
+func (store NoteStore) Delete(id int64) (int64, error) {
 	stmt, err := store.DB.Prepare(`
 	DELETE FROM notes WHERE id=?
 	`)

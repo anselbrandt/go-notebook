@@ -24,9 +24,10 @@ const Card: React.FC<CardProps> = ({ item, handleDelete }: CardProps) => {
           ✕
         </div>
       </div>
-      <div className={styles.cardSub}>{`${new Date(
-        item.UpdatedAt * 1000
-      ).toLocaleString()}`}</div>
+      <div className={styles.cardSub}>
+        <div>{`${new Date(item.UpdatedAt * 1000).toLocaleString()}`}</div>
+        <div>{item.ID}</div>
+      </div>
     </div>
   );
 };
