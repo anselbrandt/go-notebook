@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:9090/notes");
+      const response = await fetch("http://localhost:8080/notes");
       const json = await response.json();
       setData(json);
       if (json !== null) {
@@ -39,7 +39,7 @@ function App() {
 
   const handleAdd = () => {
     const addNote = async (note: {}) => {
-      const response = await fetch("http://localhost:9090/notes", {
+      const response = await fetch("http://localhost:8080/notes", {
         method: "POST",
         body: JSON.stringify(note),
       });
@@ -71,7 +71,7 @@ function App() {
 
   const handleDelete = (id: number) => {
     const deleteNote = async () => {
-      await fetch(`http://localhost:9090/notes/${id}`, {
+      await fetch(`http://localhost:8080/notes/${id}`, {
         method: "DELETE",
       });
     };

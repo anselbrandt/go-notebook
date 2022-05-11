@@ -21,7 +21,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
+var bindAddress = env.String("BIND_ADDRESS", false, ":8080", "Bind address for the server")
 
 func main() {
 
@@ -61,9 +61,9 @@ func main() {
 
 	get.HandleFunc("/api/health", handlers.HealthCheck)
 
-	// spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
+	spa := &handlers.SpaHandler{StaticPath: "frontend/build", IndexPath: "index.html"}
 
-	// m.PathPrefix("/").Handler(spa)
+	m.PathPrefix("/").Handler(spa)
 
 	// CORS
 	// ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000", "https://anselbrandt.dev", "https://www.anselbrandt.dev"}))
@@ -84,7 +84,7 @@ func main() {
 
 	// start the server
 	go func() {
-		l.Println("Starting server on port 9090")
+		l.Println("Starting server on port 8080")
 
 		err := s.ListenAndServe()
 		if err != nil {
